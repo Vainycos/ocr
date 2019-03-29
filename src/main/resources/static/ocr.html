@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>OCR</title>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/imgFileupload.js"></script>
+	<script src="js/layer.js"></script>
+	<link rel="stylesheet" href="css/layer.css" />
+	<link rel="stylesheet" href="css/ocr.css" />
+	<style type="text/css">
+		.imgFileUploade .header span.imgClick{
+			width: 50px;height: 50px;margin-left: 10px;cursor: pointer;
+			background: url(img/addUpload.png) no-repeat center center;background-size:cover; 
+		}
+	</style>
+</head>
+<body>
+	<div class="box"></div>
+	<div id="content" class="textarea" contenteditable="true"></div>
+
+	<script type="text/javascript">
+
+		var content = "";
+		var imgFile = new ImgUploadeFiles('.box',function(e){
+			this.init({
+				MAX : 3, //限制个数
+				MH : 5800, //像素限制高度
+				MW : 5900, //像素限制宽度
+				callback : function(arr){
+					var index = layer.msg('解析中', {
+					  icon: 1
+					  ,shade: 0.01
+					});
+					$.ajax({
+			            type : "POST",
+			            url : "http://www.vainycos.cn:8080/ocr/go",
+			            data:{'base64Url':arr[0].src.substring(23)},
+			            success : function(data) {
+					        var arr = eval(data);
+					        for(var i=0;i<arr.length;i++){
+					        	content += arr[i].words;
+					        }
+					        $("#content").html(content);
+					        layer.close(index);
+					        
+					    }
+					});
+				}
+			});
+		});
+	</script>
+</body>
+</html>
