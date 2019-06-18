@@ -34,12 +34,12 @@
 					});
 					$.ajax({
 			            type : "POST",
-			            url : "http://www.vainycos.cn:8080/ocr/go",
+			            url : "http://localhost:8080/img/go",
 			            data:{'base64Url':arr[0].src.substring(23)},
 			            success : function(data) {
 					        var arr = eval(data);
 					        for(var i=0;i<arr.length;i++){
-					        	content += arr[i].words;
+					        	content += arr[i].words+"<br/>";
 					        }
 					        $("#content").html(content);
 					        layer.close(index);
